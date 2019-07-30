@@ -1,4 +1,4 @@
-# Image Resizer
+# Grommet Image Resizer
 
 A PHP library for resizing images
 
