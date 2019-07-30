@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: dailygrommet/php-cli-base
+      - image: dailygrommet/php-cli-base:7.2
 
     working_directory: ~/repo
 
