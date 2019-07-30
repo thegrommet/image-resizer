@@ -31,7 +31,7 @@ jobs:
 
       - run:
           name: CodeSniff
-          command: composer cs
+          command: composer fmt-check
 
       - run:
           name: PHPUnit
