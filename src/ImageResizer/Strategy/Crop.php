@@ -21,9 +21,13 @@ class Crop extends AbstractStrategy
      */
     public $cropMode = self::CROP_MODE_CENTER;
 
-    public function __construct(int $width = null, int $height = null, string $cropMode = self::CROP_MODE_CENTER)
-    {
-        parent::__construct($width, $height);
+    public function __construct(
+        int $width = null,
+        int $height = null,
+        int $quality = null,
+        string $cropMode = self::CROP_MODE_CENTER
+    ) {
+        parent::__construct($width, $height, $quality);
         $this->cropMode = $cropMode;
     }
 

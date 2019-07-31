@@ -5,6 +5,7 @@ namespace Grommet\ImageResizer;
 
 use Grommet\ImageResizer\Adapter\AdapterInterface;
 use Grommet\ImageResizer\Exception\InvalidArgument;
+use Grommet\ImageResizer\Exception\ResizeException;
 use Grommet\ImageResizer\Strategy\StrategyInterface;
 
 /**
@@ -71,6 +72,13 @@ class Resizer
         }
         if (!$this->strategy->validate()) {
             throw new InvalidArgument('Required parameters not set on strategy');
+        }
+
+        $destDir = dirname($destination);
+        if (!is_dir($destDir)) {
+            if (!@mkdir($destDir, 0755, true)) {
+                throw new ResizeException('Unable to create destination directory');
+            }
         }
 
         return $this->adapter->resize($this->source, $this->destination, $this->strategy);

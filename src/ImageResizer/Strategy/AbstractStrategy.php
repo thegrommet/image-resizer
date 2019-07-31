@@ -10,7 +10,8 @@ abstract class AbstractStrategy implements StrategyInterface
 {
     protected $configAliases = [
         'w' => 'width',
-        'h' => 'height'
+        'h' => 'height',
+        'q' => 'quality'
     ];
 
     /**
@@ -23,10 +24,18 @@ abstract class AbstractStrategy implements StrategyInterface
      */
     public $height;
 
-    public function __construct(int $width = null, int $height = null)
+    /**
+     * Quality setting, 0-100
+     *
+     * @var int
+     */
+    public $quality;
+
+    public function __construct(int $width = null, int $height = null, int $quality = null)
     {
         $this->width = $width;
         $this->height = $height;
+        $this->quality = $quality;
     }
 
     public function bindConfig(array $config): void

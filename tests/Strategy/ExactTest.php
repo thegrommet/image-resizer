@@ -11,11 +11,12 @@ use PHPUnit\Framework\TestCase;
  */
 class ExactTest extends TestCase
 {
-    public function testContruct(): void
+    public function testConstruct(): void
     {
-        $strategy = new Exact(100, 50);
+        $strategy = new Exact(100, 50, 80);
         $this->assertSame(100, $strategy->width);
         $this->assertSame(50, $strategy->height);
+        $this->assertSame(80, $strategy->quality);
     }
 
     public function testBindConfig(): void
@@ -59,14 +60,16 @@ class ExactTest extends TestCase
                 true,
                 [
                     'width' => 100,
-                    'height' => 50
+                    'height' => 50,
+                    'quality' => 85
                 ]
             ],
             [
                 true,
                 [
                     'w' => 100,
-                    'height' => 50
+                    'height' => 50,
+                    'q' => 85
                 ]
             ],
             [

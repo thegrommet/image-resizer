@@ -15,9 +15,13 @@ class Fill extends AbstractStrategy
      */
     public $background = '#ffffff';
 
-    public function __construct(int $width = null, int $height = null, string $background = '#ffffff')
-    {
-        parent::__construct($width, $height);
+    public function __construct(
+        int $width = null,
+        int $height = null,
+        int $quality = null,
+        string $background = '#ffffff'
+    ) {
+        parent::__construct($width, $height, $quality);
         $this->background = $background;
     }
 

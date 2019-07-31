@@ -77,6 +77,51 @@ class LocalTest extends TestCase
         $adapter->resize($source, $destination, new Fill());
     }
 
+    /**
+     * @dataProvider normalizeJpgQualityProvider
+     */
+    public function testNormalizeJpgQuality(int $expected, int $input): void
+    {
+        $class = new \ReflectionClass(Local::class);
+        $method = $class->getMethod('normalizeJpgQuality');
+        $method->setAccessible(true);
+        $adapter = new Local();
+        $adapter->defaultJpgQuality = 85;
+        $this->assertSame($expected, $method->invokeArgs($adapter, [$input]));
+    }
+
+    public function normalizeJpgQualityProvider(): array
+    {
+        return [
+            [85, 85],
+            [85, 0],
+            [85, 101]
+        ];
+    }
+
+    /**
+     * @dataProvider normalizePngQualityProvider
+     */
+    public function testNormalizePngQuality(int $expected, int $input): void
+    {
+        $class = new \ReflectionClass(Local::class);
+        $method = $class->getMethod('normalizePngQuality');
+        $method->setAccessible(true);
+        $adapter = new Local();
+        $adapter->defaultPngQuality = 6;
+        $this->assertSame($expected, $method->invokeArgs($adapter, [$input]));
+    }
+
+    public function normalizePngQualityProvider(): array
+    {
+        return [
+            [9, 85],
+            [8, 84],
+            [6, 0],
+            [6, 101]
+        ];
+    }
+
     private function resourceDir(): string
     {
         return dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR;

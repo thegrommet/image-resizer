@@ -5,6 +5,7 @@ namespace Grommet\ImageResizer\Adapter;
 
 use Grommet\ImageResizer\Exception\InvalidStrategy;
 use Grommet\ImageResizer\Exception\ResizeException;
+use Grommet\ImageResizer\Strategy\AbstractStrategy;
 use Grommet\ImageResizer\Strategy\Crop;
 use Grommet\ImageResizer\Strategy\Exact;
 use Grommet\ImageResizer\Strategy\Fit;
@@ -18,12 +19,22 @@ use Gumlet\ImageResizeException;
 class Local implements AdapterInterface
 {
     /**
+     * @var int
+     */
+    public $defaultJpgQuality = 85;
+
+    /**
+     * @var int
+     */
+    public $defaultPngQuality = 6;
+
+    /**
      * @var ImageResize
      */
     private $resizer;
 
     /**
-     * @var StrategyInterface
+     * @var AbstractStrategy
      */
     private $strategy;
 
@@ -35,9 +46,14 @@ class Local implements AdapterInterface
             } catch (ImageResizeException $e) {
                 throw new ResizeException($e->getMessage(), 0, $e);
             }
-            $this->resizer->quality_jpg = 85;
-            $this->resizer->quality_png = 6;
             $this->resizer->gamma_correct = false;
+            if ($strategy->quality) {
+                $this->resizer->quality_jpg = $this->normalizeJpgQuality($strategy->quality);
+                $this->resizer->quality_png = $this->normalizePngQuality($strategy->quality);
+            } else {
+                $this->resizer->quality_jpg = $this->defaultJpgQuality;
+                $this->resizer->quality_png = $this->defaultPngQuality;
+            }
         }
         $this->strategy = $strategy;
 
@@ -82,6 +98,22 @@ class Local implements AdapterInterface
             throw new ResizeException('Could not resize image');
         }
         return true;
+    }
+
+    private function normalizeJpgQuality(int $quality): int
+    {
+        if ($quality > 0 && $quality <= 100) {
+            return $quality;
+        }
+        return $this->defaultJpgQuality;
+    }
+
+    private function normalizePngQuality(int $quality): int
+    {
+        if ($quality < 1 || $quality > 100) {
+            $quality = $this->defaultPngQuality * 10;
+        }
+        return (int)round($quality / 10);
     }
 
     public function setResizer(ImageResize $resizer): self
