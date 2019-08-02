@@ -21,4 +21,9 @@ interface StrategyInterface
      * @return bool
      */
     public function validate(): bool;
+
+    /**
+     * @return string
+     */
+    public function __toString(): string;
 }

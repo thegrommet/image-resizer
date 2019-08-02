@@ -3,20 +3,20 @@ declare(strict_types=1);
 
 namespace Grommet\ImageResizer\Tests\Strategy;
 
-use Grommet\ImageResizer\Strategy\Fit;
+use Grommet\ImageResizer\Strategy\Optimize;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Fit strategy test suite
+ * Optimize strategy test suite
  */
-class FitTest extends TestCase
+class OptimizeTest extends TestCase
 {
     /**
      * @dataProvider validateProvider
      */
     public function testValidate(bool $expected, array $config): void
     {
-        $strategy = new Fit();
+        $strategy = new Optimize();
         $strategy->bindConfig($config);
         $this->assertSame($expected, $strategy->validate());
     }
@@ -41,17 +41,11 @@ class FitTest extends TestCase
             [
                 true,
                 [
-                    'w' => 100
+                    'q' => 80
                 ]
             ],
             [
                 true,
-                [
-                    'height' => 50
-                ]
-            ],
-            [
-                false,
                 []
             ]
         ];
@@ -59,11 +53,9 @@ class FitTest extends TestCase
 
     public function testToString(): void
     {
-        $stategy = new Fit(100, 50, 80);
-        $this->assertSame('fit_w=100,h=50,q=80', $stategy->__toString());
-        $stategy = new Fit(100);
-        $this->assertSame('fit_w=100', $stategy->__toString());
-        $stategy = new Fit(null, 50);
-        $this->assertSame('fit_h=50', $stategy->__toString());
+        $stategy = new Optimize(null, null, 80);
+        $this->assertSame('optimize_q=80', $stategy->__toString());
+        $stategy = new Optimize();
+        $this->assertSame('optimize', $stategy->__toString());
     }
 }

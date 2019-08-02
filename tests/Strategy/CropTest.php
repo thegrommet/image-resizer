@@ -71,4 +71,16 @@ class CropTest extends TestCase
             ]
         ];
     }
+
+    public function testToArray(): void
+    {
+        $strategy = new Crop(100, 50, 80, Crop::CROP_MODE_CENTER);
+        $this->assertEquals(['w' => 100, 'h' => 50, 'q' => 80, 'm' => Crop::CROP_MODE_CENTER], $strategy->toArray());
+    }
+
+    public function testToString(): void
+    {
+        $stategy = new Crop(100, 50, 80, Crop::CROP_MODE_CENTER);
+        $this->assertSame('crop_w=100,h=50,q=80,m=c', $stategy->__toString());
+    }
 }

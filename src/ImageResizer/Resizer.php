@@ -35,7 +35,7 @@ class Resizer
 
     public function __construct(string $adapter = 'local')
     {
-        $adapter = self::adapterFactory($adapter);
+        $adapter = Adapter::factory($adapter);
         $this->setAdapter($adapter);
     }
 
@@ -49,7 +49,7 @@ class Resizer
         }
         if (isset($config['strategy'])) {
             if (is_string($config['strategy'])) {
-                $strategy = self::strategyFactory($config['strategy'], $config);
+                $strategy = Strategy::factory($config['strategy'], $config);
                 $this->setStrategy($strategy);
             } elseif ($config['strategy'] instanceof StrategyInterface) {
                 $this->setStrategy($config['strategy']);
@@ -57,7 +57,7 @@ class Resizer
         }
         if (isset($config['adapter'])) {
             if (is_string($config['adapter'])) {
-                $adapter = self::adapterFactory($config['adapter']);
+                $adapter = Adapter::factory($config['adapter']);
                 $this->setAdapter($adapter);
             } elseif ($config['adapter'] instanceof AdapterInterface) {
                 $this->setAdapter($config['adapter']);
@@ -82,31 +82,6 @@ class Resizer
         }
 
         return $this->adapter->resize($this->source, $this->destination, $this->strategy);
-    }
-
-    public static function strategyFactory(string $strategy, array $config = []): StrategyInterface
-    {
-        $class = __NAMESPACE__ . '\\Strategy\\' . ucfirst(strtolower($strategy));
-        if (@class_exists($class)) {
-            $strategy = new $class();
-            if ($strategy instanceof StrategyInterface) {
-                $strategy->bindConfig($config);
-                return $strategy;
-            }
-        }
-        throw new InvalidArgument('Invalid strategy');
-    }
-
-    public static function adapterFactory(string $type): AdapterInterface
-    {
-        $class = __NAMESPACE__ . '\\Adapter\\' . ucfirst(strtolower($type));
-        if (@class_exists($class)) {
-            $adapter = new $class();
-            if ($adapter instanceof AdapterInterface) {
-                return $adapter;
-            }
-        }
-        throw new InvalidArgument('Invalid adapter');
     }
 
     public function setAdapter(AdapterInterface $adapter): self

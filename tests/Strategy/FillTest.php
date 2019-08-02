@@ -70,4 +70,18 @@ class FillTest extends TestCase
             ]
         ];
     }
+
+    public function testToArray(): void
+    {
+        $strategy = new Fill(100, 50, 80, '#000');
+        $this->assertEquals(['w' => 100, 'h' => 50, 'q' => 80, 'bg' => '#000'], $strategy->toArray());
+    }
+
+    public function testToString(): void
+    {
+        $stategy = new Fill(100, 50, 80, '#fff');
+        $this->assertSame('fill_w=100,h=50,q=80,bg=#fff', $stategy->__toString());
+        $stategy = new Fill(null, 50);
+        $this->assertSame('fill_h=50,bg=#ffffff', $stategy->__toString());
+    }
 }

@@ -9,6 +9,7 @@ use Grommet\ImageResizer\Strategy\AbstractStrategy;
 use Grommet\ImageResizer\Strategy\Crop;
 use Grommet\ImageResizer\Strategy\Exact;
 use Grommet\ImageResizer\Strategy\Fit;
+use Grommet\ImageResizer\Strategy\Optimize;
 use Grommet\ImageResizer\Strategy\StrategyInterface;
 use Gumlet\ImageResize;
 use Gumlet\ImageResizeException;
@@ -57,7 +58,9 @@ class Local implements AdapterInterface
         }
         $this->strategy = $strategy;
 
-        if ($strategy instanceof Fit) {
+        if ($strategy instanceof Optimize) {
+            $this->resizer->scale(100);
+        } elseif ($strategy instanceof Fit) {
             if ($strategy->width && $strategy->height) {
                 $this->resizer->resizeToBestFit($strategy->width, $strategy->height, true);
             } elseif ($strategy->width) {
@@ -125,6 +128,7 @@ class Local implements AdapterInterface
     public function supportedStrategies(): array
     {
         return [
+            Optimize::STRATEGY,
             Exact::STRATEGY,
             Fit::STRATEGY,
             Crop::STRATEGY

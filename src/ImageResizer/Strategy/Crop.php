@@ -28,11 +28,17 @@ class Crop extends AbstractStrategy
         string $cropMode = self::CROP_MODE_CENTER
     ) {
         parent::__construct($width, $height, $quality);
+        $this->configAliases['m'] = 'cropMode';
         $this->cropMode = $cropMode;
     }
 
     public function validate(): bool
     {
         return $this->width > 0 && $this->height > 0 && !empty($this->cropMode);
+    }
+
+    public function toArray(): array
+    {
+        return array_merge(parent::toArray(), ['m' => $this->cropMode]);
     }
 }

@@ -10,6 +10,7 @@ use Grommet\ImageResizer\Strategy\Crop;
 use Grommet\ImageResizer\Strategy\Exact;
 use Grommet\ImageResizer\Strategy\Fill;
 use Grommet\ImageResizer\Strategy\Fit;
+use Grommet\ImageResizer\Strategy\Optimize;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,6 +18,19 @@ use PHPUnit\Framework\TestCase;
  */
 class LocalTest extends TestCase
 {
+    public function testResizeOptimize(): void
+    {
+        $adapter = new Local();
+        $source = $this->resourceDir() . 'test.jpg';
+        $destination = $this->resourceDir() . 'out.jpg';
+        $adapter->resize($source, $destination, new Optimize());
+        $this->assertTrue(file_exists($destination));
+        $sourceSize = getimagesize($destination);
+        $destSize = getimagesize($destination);
+        $this->assertEquals($sourceSize, $destSize);
+        unlink($destination);
+    }
+
     public function testResizeFit(): void
     {
         $adapter = new Local();

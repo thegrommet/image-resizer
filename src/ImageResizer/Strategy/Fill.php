@@ -22,11 +22,17 @@ class Fill extends AbstractStrategy
         string $background = '#ffffff'
     ) {
         parent::__construct($width, $height, $quality);
+        $this->configAliases['bg'] = 'background';
         $this->background = $background;
     }
 
     public function validate(): bool
     {
         return $this->width > 0 || $this->height > 0;
+    }
+
+    public function toArray(): array
+    {
+        return array_merge(parent::toArray(), ['bg' => $this->background]);
     }
 }
