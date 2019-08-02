@@ -13,10 +13,24 @@ class ResizerTest extends TestCase
 {
     public function testResize(): void
     {
-        $source = $this->resourceDir() . 'test.jpg';
         $destination = $this->resourceDir() . 'out.jpg';
-        $resizer = new Resizer();
-        $resizer->resize($source, $destination, ['strategy' => 'fit', 'width' => 100]);
+        $resizer = new Resizer($this->resourceDir(), $this->resourceDir());
+        $res = $resizer->resize('test.jpg', 'out.jpg', ['strategy' => 'fit', 'width' => 100]);
+        $this->assertSame($destination, $res);
+        $this->assertTrue(file_exists($destination));
+        $size = getimagesize($destination);
+        $this->assertSame(100, $size[0]);
+        $this->assertSame(50, $size[1]);
+        unlink($destination);
+    }
+
+    public function testResizeSameName(): void
+    {
+        $destination = $this->resourceDir() . 'out.jpg';
+        copy($this->resourceDir() . 'test.jpg', $destination);
+        $resizer = new Resizer($this->resourceDir(), $this->resourceDir());
+        $res = $resizer->resize('out.jpg', null, ['strategy' => 'fit', 'width' => 100]);
+        $this->assertSame($destination, $res);
         $this->assertTrue(file_exists($destination));
         $size = getimagesize($destination);
         $this->assertSame(100, $size[0]);
@@ -26,10 +40,10 @@ class ResizerTest extends TestCase
 
     public function testResizeNewDir(): void
     {
-        $source = $this->resourceDir() . 'test.jpg';
-        $destination = $this->resourceDir() . 'new/out.jpg';
-        $resizer = new Resizer();
-        $resizer->resize($source, $destination, ['strategy' => 'fit', 'width' => 100]);
+        $destination = $this->resourceDir('new') . 'out.jpg';
+        $resizer = new Resizer($this->resourceDir(), $this->resourceDir('new'));
+        $res = $resizer->resize('test.jpg', 'out.jpg', ['strategy' => 'fit', 'width' => 100]);
+        $this->assertSame($destination, $res);
         $this->assertTrue(is_dir(dirname($destination)));
         $this->assertTrue(file_exists($destination));
         $size = getimagesize($destination);
@@ -39,8 +53,12 @@ class ResizerTest extends TestCase
         rmdir(dirname($destination));
     }
 
-    private function resourceDir(): string
+    private function resourceDir(string $sub = ''): string
     {
-        return dirname(__FILE__) . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR;
+        $dir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR;
+        if ($sub) {
+            $dir .= $sub . DIRECTORY_SEPARATOR;
+        }
+        return $dir;
     }
 }

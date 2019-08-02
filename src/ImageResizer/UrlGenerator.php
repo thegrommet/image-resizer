@@ -64,4 +64,10 @@ class UrlGenerator
             ltrim($imagePath, '/')
         );
     }
+
+    public function setStrategy(StrategyInterface $strategy): self
+    {
+        $this->strategy = $strategy;
+        return $this;
+    }
 }

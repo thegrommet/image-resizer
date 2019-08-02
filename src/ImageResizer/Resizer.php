@@ -6,6 +6,7 @@ namespace Grommet\ImageResizer;
 use Grommet\ImageResizer\Adapter\AdapterInterface;
 use Grommet\ImageResizer\Exception\InvalidArgument;
 use Grommet\ImageResizer\Exception\ResizeException;
+use Grommet\ImageResizer\ImageResizer\Storage;
 use Grommet\ImageResizer\Strategy\StrategyInterface;
 
 /**
@@ -24,28 +25,34 @@ class Resizer
     private $adapter;
 
     /**
-     * @var string
+     * @var Storage
      */
-    private $source;
+    private $storage;
 
-    /**
-     * @var string
-     */
-    private $destination;
-
-    public function __construct(string $adapter = 'local')
+    public function __construct(string $sourceBase, string $destinationBase, string $adapter = 'local')
     {
-        $adapter = Adapter::factory($adapter);
-        $this->setAdapter($adapter);
+        $this->storage = new Storage($sourceBase, $destinationBase);
+        $this->adapter = Adapter::factory($adapter);
     }
 
-    public function resize(string $source = null, string $destination = null, array $config = []): bool
+    /**
+     * Resize the image in source and return the path of the new image
+     *
+     * @param string $sourceName
+     * @param string|null $destinationName
+     * @param array $config
+     * @return string
+     */
+    public function resize(string $sourceName, ?string $destinationName = null, array $config = []): string
     {
-        if ($source) {
-            $this->source = $source;
+        if (empty($sourceName)) {
+            throw new InvalidArgument('Invalid source file');
         }
-        if ($destination) {
-            $this->destination = $destination;
+        if (!$destinationName) {
+            $destinationName = $sourceName;
+        }
+        if (empty($destinationName)) {
+            throw new InvalidArgument('Invalid destination file');
         }
         if (isset($config['strategy'])) {
             if (is_string($config['strategy'])) {
@@ -74,14 +81,14 @@ class Resizer
             throw new InvalidArgument('Required parameters not set on strategy');
         }
 
-        $destDir = dirname($destination);
-        if (!is_dir($destDir)) {
-            if (!@mkdir($destDir, 0755, true)) {
-                throw new ResizeException('Unable to create destination directory');
-            }
+        if ($this->adapter->resize(
+            $this->storage->sourcePath($sourceName),
+            $this->storage->destinationPath($destinationName),
+            $this->strategy
+        )) {
+            return $this->storage->destinationPath($destinationName);
         }
-
-        return $this->adapter->resize($this->source, $this->destination, $this->strategy);
+        throw new ResizeException('Unable to resize the image');
     }
 
     public function setAdapter(AdapterInterface $adapter): self
@@ -96,15 +103,9 @@ class Resizer
         return $this;
     }
 
-    public function setSourcePath(string $source): self
+    public function setStorage(Storage $storage): self
     {
-        $this->source = $source;
-        return $this;
-    }
-
-    public function setDestinationPath(string $destination): self
-    {
-        $this->destination = $destination;
+        $this->storage = $storage;
         return $this;
     }
 }
