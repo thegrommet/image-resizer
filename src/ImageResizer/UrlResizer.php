@@ -32,7 +32,8 @@ class UrlResizer
         $parser = new UrlParser($this->baseUrl);
         $parser->parse($url);
 
-        $resizer = new Resizer($this->sourceBasePath, $this->destinationBasePath, $this->adapter);
+        $destination = $this->destinationBasePath . DIRECTORY_SEPARATOR . $parser->strategy;
+        $resizer = new Resizer($this->sourceBasePath, $destination, $this->adapter);
         $resizer->setStrategy($parser->strategy);
         return $resizer->resize($parser->imagePath);
     }

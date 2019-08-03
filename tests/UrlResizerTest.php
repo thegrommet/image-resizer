@@ -13,14 +13,15 @@ class UrlResizerTest extends TestCase
 {
     public function testResize(): void
     {
-        $destination = $this->resourceDir('new') . 'test.jpg';
+        $destinationBase = $this->resourceDir('new');
         $urlResizer = new UrlResizer(
             $this->resourceDir(),
-            $this->resourceDir('new'),
+            $destinationBase,
             'https://cdn.site.com/media/resized'
         );
 
         $url = 'https://cdn.site.com/media/resized/fit_w=100/test.jpg';
+        $destination = implode(DIRECTORY_SEPARATOR, [$destinationBase, 'fit_w=100', 'test.jpg']);
 
         $res = $urlResizer->resize($url);
         $this->assertSame($destination, $res);
@@ -30,6 +31,7 @@ class UrlResizerTest extends TestCase
         $this->assertSame(50, $size[1]);
         unlink($destination);
         rmdir(dirname($destination));
+        rmdir(dirname($destination, 2));
     }
 
     private function resourceDir(string $sub = ''): string
