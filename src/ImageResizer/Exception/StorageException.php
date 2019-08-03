@@ -6,7 +6,7 @@ namespace Grommet\ImageResizer\Exception;
 /**
  * Storage exception
  */
-class StorageException extends \Exception
+class StorageException extends AbstractException
 {
 
 }

@@ -73,6 +73,7 @@ class LocalTest extends TestCase
     public function testResizeInvalidSource(): void
     {
         $this->expectException(ResizeException::class);
+        $this->expectExceptionCode(ResizeException::CODE_NOT_FOUND);
 
         $adapter = new Local();
         $source = $this->resourceDir() . 'bogus.jpg';
@@ -83,6 +84,7 @@ class LocalTest extends TestCase
     public function testResizeInvalidStrategy(): void
     {
         $this->expectException(InvalidStrategy::class);
+        $this->expectExceptionCode(InvalidStrategy::CODE_UNPROCESSABLE);
         $this->expectExceptionMessage('Strategy not supported by this adapter');
 
         $adapter = new Local();

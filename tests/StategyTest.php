@@ -26,6 +26,7 @@ class StrategyTest extends TestCase
     public function testFactoryInvalid(): void
     {
         $this->expectException(InvalidArgument::class);
+        $this->expectExceptionCode(InvalidArgument::CODE_UNPROCESSABLE);
         Strategy::factory('bogus');
     }
 }

@@ -6,7 +6,7 @@ namespace Grommet\ImageResizer\Exception;
 /**
  * Invalid Argument exception
  */
-class InvalidArgument extends \Exception
+class InvalidArgument extends AbstractException
 {
 
 }

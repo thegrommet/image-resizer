@@ -6,7 +6,7 @@ namespace Grommet\ImageResizer\Exception;
 /**
  * Invalid Url exception
  */
-class InvalidUrl extends \Exception
+class InvalidUrl extends AbstractException
 {
 
 }

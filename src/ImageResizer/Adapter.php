@@ -20,6 +20,6 @@ class Adapter
                 return $adapter;
             }
         }
-        throw new InvalidArgument('Invalid adapter');
+        throw new InvalidArgument('Invalid adapter', InvalidArgument::CODE_UNPROCESSABLE);
     }
 }

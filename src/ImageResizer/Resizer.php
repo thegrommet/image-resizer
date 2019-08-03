@@ -46,13 +46,13 @@ class Resizer
     public function resize(string $sourceName, ?string $destinationName = null, array $config = []): string
     {
         if (empty($sourceName)) {
-            throw new InvalidArgument('Invalid source file');
+            throw new InvalidArgument('Invalid source file', InvalidArgument::CODE_NOT_FOUND);
         }
         if (!$destinationName) {
             $destinationName = $sourceName;
         }
         if (empty($destinationName)) {
-            throw new InvalidArgument('Invalid destination file');
+            throw new InvalidArgument('Invalid destination file', InvalidArgument::CODE_UNPROCESSABLE);
         }
         if (isset($config['strategy'])) {
             if (is_string($config['strategy'])) {
@@ -72,13 +72,13 @@ class Resizer
         }
 
         if (!$this->adapter) {
-            throw new InvalidArgument('Image adapter not set');
+            throw new InvalidArgument('Image adapter not set', InvalidArgument::CODE_UNPROCESSABLE);
         }
         if (!$this->strategy) {
-            throw new InvalidArgument('Resize strategy not set');
+            throw new InvalidArgument('Resize strategy not set', InvalidArgument::CODE_UNPROCESSABLE);
         }
         if (!$this->strategy->validate()) {
-            throw new InvalidArgument('Required parameters not set on strategy');
+            throw new InvalidArgument('Required parameters not set on strategy', InvalidArgument::CODE_UNPROCESSABLE);
         }
 
         if ($this->adapter->resize(
@@ -88,7 +88,7 @@ class Resizer
         )) {
             return $this->storage->destinationPath($destinationName);
         }
-        throw new ResizeException('Unable to resize the image');
+        throw new ResizeException('Unable to resize the image', InvalidArgument::CODE_INTERNAL_ERROR);
     }
 
     public function setAdapter(AdapterInterface $adapter): self

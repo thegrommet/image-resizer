@@ -47,7 +47,7 @@ class UrlGenerator
             } elseif ($resizeParams['strategy'] instanceof StrategyInterface) {
                 $this->strategy = $resizeParams['strategy'];
             } else {
-                throw new InvalidStrategy('Invalid resize strategy');
+                throw new InvalidStrategy('Invalid resize strategy', InvalidStrategy::CODE_UNPROCESSABLE);
             }
         } else {  // guess strategy
             if (isset($resizeParams['width']) || isset($resizeParams['height'])) {

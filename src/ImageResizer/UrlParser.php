@@ -47,12 +47,12 @@ class UrlParser
         }
         $url = trim($url, '/');
         if (strpos($url, '/') === false) {
-            throw new InvalidUrl('Missing resize parameters');
+            throw new InvalidUrl('Missing resize parameters', InvalidUrl::CODE_NOT_FOUND);
         }
         list($params, $imagePath) = explode('/', $url, 2);
         $imagePath = trim($imagePath, '/');
         if (empty($imagePath)) {
-            throw new InvalidUrl('Invalid image path');
+            throw new InvalidUrl('Invalid image path', InvalidUrl::CODE_NOT_FOUND);
         }
         $this->imagePath = '/' . $imagePath;
         if (strpos($params, '_') === false) {
@@ -61,7 +61,7 @@ class UrlParser
             list($strategy, $params) = explode('_', $params, 2);
         }
         if (empty($strategy) || preg_match('/[^a-z0-9]/i', $strategy) !== 0) {
-            throw new InvalidUrl('Invalid resize strategy');
+            throw new InvalidUrl('Invalid resize strategy', InvalidUrl::CODE_NOT_FOUND);
         }
         $params = explode(',', $params);
         $properties = [];
@@ -73,7 +73,7 @@ class UrlParser
         }
         $this->strategy = Strategy::factory($strategy, $properties);
         if (!$this->strategy->validate()) {
-            throw new InvalidUrl('Required parameters not set on strategy');
+            throw new InvalidUrl('Required parameters not set on strategy', InvalidUrl::CODE_UNPROCESSABLE);
         }
         return true;
     }

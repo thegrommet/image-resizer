@@ -66,7 +66,7 @@ abstract class AbstractStrategy implements StrategyInterface
     public function __toString(): string
     {
         if (!$this->validate()) {
-            throw new InvalidStrategy('Required parameters not set on strategy');
+            throw new InvalidStrategy('Required parameters not set on strategy', InvalidStrategy::CODE_UNPROCESSABLE);
         }
         $properties = array_filter($this->toArray(), function ($property) {
             return !empty($property);

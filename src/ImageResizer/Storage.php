@@ -17,22 +17,22 @@ class Storage
     {
         $this->sourceBase = rtrim($sourceBase, '/\\');
         if (empty($this->sourceBase)) {
-            throw new StorageException('Invalid source directory');
+            throw new StorageException('Invalid source directory', StorageException::CODE_NOT_FOUND);
         } elseif (!is_dir($this->sourceBase)) {
-            throw new StorageException('Cannot read source directory');
+            throw new StorageException('Cannot read source directory', StorageException::CODE_FORBIDDEN);
         }
         $this->destinationBase = rtrim($destinationBase, '/\\');
         if (empty($this->destinationBase)) {
-            throw new StorageException('Invalid destination directory');
+            throw new StorageException('Invalid destination directory', StorageException::CODE_UNPROCESSABLE);
         } elseif (!is_dir($this->destinationBase) && !@mkdir($this->destinationBase, 0755, true)) {
-            throw new StorageException('Cannot write to destination directory');
+            throw new StorageException('Cannot write to destination directory', StorageException::CODE_FORBIDDEN);
         }
     }
 
     public function sourcePath(string $filePath): string
     {
         if (strstr($filePath, '..') !== false) {
-            throw new StorageException('Invalid file path');
+            throw new StorageException('Invalid file path', StorageException::CODE_FORBIDDEN);
         }
         return $this->sourceBase . DIRECTORY_SEPARATOR . ltrim($filePath, '/\\');
     }
@@ -40,11 +40,11 @@ class Storage
     public function destinationPath(string $filePath, bool $makeDir = false): string
     {
         if (strstr($filePath, '..') !== false) {
-            throw new StorageException('Invalid file path');
+            throw new StorageException('Invalid file path', StorageException::CODE_FORBIDDEN);
         }
         $path = $this->destinationBase . DIRECTORY_SEPARATOR . ltrim($filePath, '/\\');
         if ($makeDir && !is_dir(dirname($path)) && !@mkdir(dirname($path), 0755, true)) {
-            throw new StorageException('Cannot write to destination directory');
+            throw new StorageException('Cannot write to destination directory', StorageException::CODE_FORBIDDEN);
         }
         return $path;
     }

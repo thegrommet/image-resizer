@@ -21,6 +21,6 @@ class Strategy
                 return $strategy;
             }
         }
-        throw new InvalidArgument('Invalid strategy');
+        throw new InvalidArgument('Invalid strategy', InvalidArgument::CODE_UNPROCESSABLE);
     }
 }

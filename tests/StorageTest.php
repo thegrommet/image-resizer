@@ -44,6 +44,7 @@ class StorageTest extends TestCase
     public function testDestinationPathInvalid(): void
     {
         $this->expectException(StorageException::class);
+        $this->expectExceptionCode(StorageException::CODE_FORBIDDEN);
         $store = new Storage($this->resourceDir(), $this->resourceDir('new'));
         $store->destinationPath('/../image.jpg');
     }
@@ -54,6 +55,7 @@ class StorageTest extends TestCase
     public function testConstructInvalid($source, $destination): void
     {
         $this->expectException(StorageException::class);
+        $this->expectExceptionCode(StorageException::CODE_FORBIDDEN);
         new Storage($source, $destination);
     }
 

@@ -45,7 +45,7 @@ class Local implements AdapterInterface
             try {
                 $this->resizer = new ImageResize($source);
             } catch (ImageResizeException $e) {
-                throw new ResizeException($e->getMessage(), 0, $e);
+                throw new ResizeException($e->getMessage(), ResizeException::CODE_NOT_FOUND, $e);
             }
             $this->resizer->gamma_correct = false;
             if ($strategy->quality) {
@@ -90,15 +90,15 @@ class Local implements AdapterInterface
             }
             $this->resizer->crop($strategy->width, $strategy->height, true, $cropMode);
         } else {
-            throw new InvalidStrategy('Strategy not supported by this adapter');
+            throw new InvalidStrategy('Strategy not supported by this adapter', InvalidStrategy::CODE_UNPROCESSABLE);
         }
         try {
             $this->resizer->save($destination);
         } catch (\Exception $e) {
-            throw new ResizeException($e->getMessage(), 0, $e);
+            throw new ResizeException($e->getMessage(), ResizeException::CODE_INTERNAL_ERROR, $e);
         }
         if (!file_exists($destination)) {
-            throw new ResizeException('Could not resize image');
+            throw new ResizeException('Could not resize image', InvalidStrategy::CODE_INTERNAL_ERROR);
         }
         return true;
     }

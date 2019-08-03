@@ -6,7 +6,7 @@ namespace Grommet\ImageResizer\Exception;
 /**
  * Invalid Strategy exception
  */
-class InvalidStrategy extends \Exception
+class InvalidStrategy extends AbstractException
 {
 
 }
