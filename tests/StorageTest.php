@@ -31,6 +31,16 @@ class StorageTest extends TestCase
         $this->assertSame($this->resourceDir('new') . 'image.jpg', $store->destinationPath('image.jpg'));
     }
 
+    public function testDestinationPathMakeDir(): void
+    {
+        $store = new Storage($this->resourceDir(), $this->resourceDir('new'));
+        $destDir = $this->resourceDir('new' . DIRECTORY_SEPARATOR . 'i');
+        $this->assertSame($destDir . 'image.jpg', $store->destinationPath('i/image.jpg', true));
+        $this->assertTrue(is_dir($destDir));
+        rmdir($destDir);
+        rmdir(dirname($destDir));
+    }
+
     public function testDestinationPathInvalid(): void
     {
         $this->expectException(StorageException::class);

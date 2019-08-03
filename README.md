@@ -29,6 +29,7 @@ $urlResizer = new \Grommet\ImageResizer\UrlResizer(
 // incoming request for a resized image
 $url = 'https://cdn.site.com/media/resized/fit_w=100/i/image.jpg';
 $newPath = $urlResizer->resize($url);
+// $newPath = '/path/to/save/fit_w=100/i/image.jpg'
 
 header('content-type', 'image/jpeg');
 echo file_get_contents($newPath);

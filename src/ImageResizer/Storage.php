@@ -29,7 +29,7 @@ class Storage
         }
     }
 
-    public function sourcePath($filePath): string
+    public function sourcePath(string $filePath): string
     {
         if (strstr($filePath, '..') !== false) {
             throw new StorageException('Invalid file path');
@@ -37,11 +37,15 @@ class Storage
         return $this->sourceBase . DIRECTORY_SEPARATOR . ltrim($filePath, '/\\');
     }
 
-    public function destinationPath($filePath): string
+    public function destinationPath(string $filePath, bool $makeDir = false): string
     {
         if (strstr($filePath, '..') !== false) {
             throw new StorageException('Invalid file path');
         }
-        return $this->destinationBase . DIRECTORY_SEPARATOR . ltrim($filePath, '/\\');
+        $path = $this->destinationBase . DIRECTORY_SEPARATOR . ltrim($filePath, '/\\');
+        if ($makeDir && !is_dir(dirname($path)) && !@mkdir(dirname($path), 0755, true)) {
+            throw new StorageException('Cannot write to destination directory');
+        }
+        return $path;
     }
 }

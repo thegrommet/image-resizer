@@ -20,8 +20,11 @@ class UrlResizerTest extends TestCase
             'https://cdn.site.com/media/resized'
         );
 
-        $url = 'https://cdn.site.com/media/resized/fit_w=100/test.jpg';
-        $destination = implode(DIRECTORY_SEPARATOR, [$destinationBase, 'fit_w=100', 'test.jpg']);
+        $url = 'https://cdn.site.com/media/resized/fit_w=100/t/test.jpg';
+        $destination = implode(
+            DIRECTORY_SEPARATOR,
+            [rtrim($destinationBase, DIRECTORY_SEPARATOR), 'fit_w=100', 't', 'test.jpg']
+        );
 
         $res = $urlResizer->resize($url);
         $this->assertSame($destination, $res);
@@ -32,6 +35,7 @@ class UrlResizerTest extends TestCase
         unlink($destination);
         rmdir(dirname($destination));
         rmdir(dirname($destination, 2));
+        rmdir(dirname($destination, 3));
     }
 
     private function resourceDir(string $sub = ''): string

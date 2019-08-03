@@ -83,7 +83,7 @@ class Resizer
 
         if ($this->adapter->resize(
             $this->storage->sourcePath($sourceName),
-            $this->storage->destinationPath($destinationName),
+            $this->storage->destinationPath($destinationName, true),
             $this->strategy
         )) {
             return $this->storage->destinationPath($destinationName);
