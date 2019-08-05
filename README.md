@@ -18,6 +18,24 @@ $url = $urlGen->imageUrl('i/image.jpg', ['strategy' => 'fit', 'width' => 100]);
 // $url = 'https://cdn.site.com/media/fit_w=100/i/image.jpg'
 ```
 
+#### Resize presets
+```php
+$presets = [
+    'small' => [
+        'width' => 293,
+        'height' => 219
+    ],
+    'large' => [
+        'strategy' = 'crop',
+        'width' => 500,
+        'height' => 500
+    ]
+];
+$urlGen = new \Grommet\ImageResizer\UrlGenerator('https://cdn.site.com/media', $presets);
+$url = $urlGen->imageUrl('i/image.jpg', ['size' => 'small']);
+// $url = 'https://cdn.site.com/media/fit_w=293,h=219/i/image.jpg'
+```
+
 ### Resizing service
 ```php
 $urlResizer = new \Grommet\ImageResizer\UrlResizer(
