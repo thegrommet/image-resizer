@@ -32,5 +32,53 @@ class UrlGeneratorTest extends TestCase
 
         $gen->baseUrl = 'http://test.com/media';
         $this->assertSame('http://test.com/media/fit_w=100,h=80/image.jpg', $gen->imageUrl('image.jpg', $params));
+
+        $params = [
+            'w' => 100,
+            'h' => 80
+        ];
+        $this->assertSame('http://test.com/media/fit_w=100,h=80/image.jpg', $gen->imageUrl('image.jpg', $params));
+
+        $params = ['strategy' => 'optimize'];
+        $this->assertSame('http://test.com/media/optimize/image.jpg', $gen->imageUrl('image.jpg', $params));
+        $this->assertSame('http://test.com/media/optimize/image.jpg', $gen->imageUrl('image.jpg', []));
+    }
+
+    public function testImageUrlPresets(): void
+    {
+        $presets = [
+            'small' => [
+                'strategy' => 'fit',
+                'width' => 400,
+                'height' => 300
+            ],
+            'medium' => [
+                'strategy' => 'crop',
+                'width' => 500,
+                'height' => 400
+            ]
+        ];
+        $gen = new UrlGenerator('http://test.com/media', $presets);
+        $gen->addPreset('large', []);
+        $this->assertSame(
+            'http://test.com/media/fit_w=400,h=300/image.jpg',
+            $gen->imageUrl('image.jpg', ['size' => 'small'])
+        );
+        $this->assertSame(
+            'http://test.com/media/crop_w=500,h=400,m=c/image.jpg',
+            $gen->imageUrl('image.jpg', ['size' => 'medium'])
+        );
+        $this->assertSame(
+            'http://test.com/media/crop_w=500,h=500,m=c/image.jpg',
+            $gen->imageUrl('image.jpg', ['size' => 'medium', 'h' => 500])
+        );
+        $this->assertSame(
+            'http://test.com/media/optimize/image.jpg',
+            $gen->imageUrl('image.jpg', ['size' => 'large'])
+        );
+        $this->assertSame(
+            'http://test.com/media/optimize/image.jpg',
+            $gen->imageUrl('image.jpg', ['size' => 'bogus'])
+        );
     }
 }

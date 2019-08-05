@@ -27,9 +27,17 @@ class UrlGenerator
      */
     private $strategy;
 
-    public function __construct(string $baseUrl = '')
+    /**
+     * @var array
+     */
+    private $presets = [];
+
+    public function __construct(string $baseUrl = '', array $presets = [])
     {
         $this->baseUrl = $baseUrl;
+        foreach ($presets as $name => $params) {
+            $this->addPreset($name, $params);
+        }
     }
 
     /**
@@ -41,6 +49,9 @@ class UrlGenerator
      */
     public function imageUrl(string $imagePath, array $resizeParams = []): string
     {
+        if (isset($resizeParams['size']) && isset($this->presets[$resizeParams['size']])) {
+            $resizeParams = array_merge($this->presets[$resizeParams['size']], $resizeParams);
+        }
         if (isset($resizeParams['strategy'])) {
             if (is_string($resizeParams['strategy'])) {
                 $this->strategy = Strategy::factory($resizeParams['strategy'], $resizeParams);
@@ -50,7 +61,8 @@ class UrlGenerator
                 throw new InvalidStrategy('Invalid resize strategy', InvalidStrategy::CODE_UNPROCESSABLE);
             }
         } else {  // guess strategy
-            if (isset($resizeParams['width']) || isset($resizeParams['height'])) {
+            if (isset($resizeParams['width']) || isset($resizeParams['height'])
+                || isset($resizeParams['w']) || isset($resizeParams['h'])) {
                 $this->strategy = new Fit();
             } else {
                 $this->strategy = new Optimize();
@@ -68,6 +80,12 @@ class UrlGenerator
     public function setStrategy(StrategyInterface $strategy): self
     {
         $this->strategy = $strategy;
+        return $this;
+    }
+
+    public function addPreset(string $name, array $resizeParams): self
+    {
+        $this->presets[$name] = $resizeParams;
         return $this;
     }
 }
