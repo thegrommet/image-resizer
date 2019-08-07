@@ -19,7 +19,7 @@ $newPath = $resizer->resize('in.jpg', 'out.jpg', ['strategy' => 'fit', 'width' =
 ```php
 $urlGen = new \Grommet\ImageResizer\UrlGenerator('https://cdn.site.com/media');
 $url = $urlGen->imageUrl('i/image.jpg', ['strategy' => 'fit', 'width' => 100]);
-// $url = 'https://cdn.site.com/media/fit_w=100/i/image.jpg'
+// $url = 'https://cdn.site.com/media/fit_w%3D100/i/image.jpg'
 ```
 
 #### Resize presets
@@ -37,7 +37,7 @@ $presets = [
 ];
 $urlGen = new \Grommet\ImageResizer\UrlGenerator('https://cdn.site.com/media', $presets);
 $url = $urlGen->imageUrl('i/image.jpg', ['size' => 'small']);
-// $url = 'https://cdn.site.com/media/fit_w=293,h=219/i/image.jpg'
+// $url = 'https://cdn.site.com/media/fit_w%3D293%2Ch%3D219/i/image.jpg'
 ```
 
 ### Resizing service

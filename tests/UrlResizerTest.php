@@ -20,7 +20,7 @@ class UrlResizerTest extends TestCase
             'https://cdn.site.com/media/resized'
         );
 
-        $url = 'https://cdn.site.com/media/resized/fit_w=100/t/test.jpg';
+        $url = 'https://cdn.site.com/media/resized/fit_w%3D100/t/test.jpg';
         $destination = implode(
             DIRECTORY_SEPARATOR,
             [rtrim($destinationBase, DIRECTORY_SEPARATOR), 'fit_w=100', 't', 'test.jpg']
