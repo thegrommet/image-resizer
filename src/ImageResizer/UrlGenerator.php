@@ -72,7 +72,7 @@ class UrlGenerator
         return sprintf(
             '%s/%s/%s',
             rtrim($this->baseUrl, '/'),
-            $this->strategy,
+            urlencode($this->strategy->__toString()),
             ltrim($imagePath, '/')
         );
     }

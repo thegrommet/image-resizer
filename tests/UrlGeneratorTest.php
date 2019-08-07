@@ -19,25 +19,29 @@ class UrlGeneratorTest extends TestCase
             'width' => 100,
             'height' => 80
         ];
-        $this->assertSame('/exact_w=100,h=80/i/m/image.jpg', $gen->imageUrl('/i/m/image.jpg', $params));
+        $expected = sprintf('/%s/i/m/image.jpg', urlencode('exact_w=100,h=80'));
+        $this->assertSame($expected, $gen->imageUrl('/i/m/image.jpg', $params));
         $params = [
             'strategy' => 'fit',
             'width' => 100,
             'height' => 80
         ];
-        $this->assertSame('/fit_w=100,h=80/image.jpg', $gen->imageUrl('image.jpg', $params));
+        $expected = sprintf('/%s/image.jpg', urlencode('fit_w=100,h=80'));
+        $this->assertSame($expected, $gen->imageUrl('image.jpg', $params));
 
         $gen->baseUrl = '/media/';
-        $this->assertSame('/media/fit_w=100,h=80/image.jpg', $gen->imageUrl('image.jpg', $params));
+        $expected = sprintf('/media/%s/image.jpg', urlencode('fit_w=100,h=80'));
+        $this->assertSame($expected, $gen->imageUrl('image.jpg', $params));
 
         $gen->baseUrl = 'http://test.com/media';
-        $this->assertSame('http://test.com/media/fit_w=100,h=80/image.jpg', $gen->imageUrl('image.jpg', $params));
+        $expected = sprintf('http://test.com/media/%s/image.jpg', urlencode('fit_w=100,h=80'));
+        $this->assertSame($expected, $gen->imageUrl('image.jpg', $params));
 
         $params = [
             'w' => 100,
             'h' => 80
         ];
-        $this->assertSame('http://test.com/media/fit_w=100,h=80/image.jpg', $gen->imageUrl('image.jpg', $params));
+        $this->assertSame($expected, $gen->imageUrl('image.jpg', $params));
 
         $params = ['strategy' => 'optimize'];
         $this->assertSame('http://test.com/media/optimize/image.jpg', $gen->imageUrl('image.jpg', $params));
@@ -60,18 +64,12 @@ class UrlGeneratorTest extends TestCase
         ];
         $gen = new UrlGenerator('http://test.com/media', $presets);
         $gen->addPreset('large', []);
-        $this->assertSame(
-            'http://test.com/media/fit_w=400,h=300/image.jpg',
-            $gen->imageUrl('image.jpg', ['size' => 'small'])
-        );
-        $this->assertSame(
-            'http://test.com/media/crop_w=500,h=400,m=c/image.jpg',
-            $gen->imageUrl('image.jpg', ['size' => 'medium'])
-        );
-        $this->assertSame(
-            'http://test.com/media/crop_w=500,h=500,m=c/image.jpg',
-            $gen->imageUrl('image.jpg', ['size' => 'medium', 'h' => 500])
-        );
+        $expected = sprintf('http://test.com/media/%s/image.jpg', urlencode('fit_w=400,h=300'));
+        $this->assertSame($expected, $gen->imageUrl('image.jpg', ['size' => 'small']));
+        $expected = sprintf('http://test.com/media/%s/image.jpg', urlencode('crop_w=500,h=400,m=c'));
+        $this->assertSame($expected, $gen->imageUrl('image.jpg', ['size' => 'medium']));
+        $expected = sprintf('http://test.com/media/%s/image.jpg', urlencode('crop_w=500,h=500,m=c'));
+        $this->assertSame($expected, $gen->imageUrl('image.jpg', ['size' => 'medium', 'h' => 500]));
         $this->assertSame(
             'http://test.com/media/optimize/image.jpg',
             $gen->imageUrl('image.jpg', ['size' => 'large'])

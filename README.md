@@ -2,6 +2,10 @@
 
 A PHP library for resizing images
 
+### Build status
+
+[![CircleCI](https://circleci.com/gh/thegrommet/image-resizer.svg?style=svg)](https://circleci.com/gh/thegrommet/image-resizer)
+
 ## Usage
 
 ### Resizing
