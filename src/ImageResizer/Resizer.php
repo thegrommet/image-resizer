@@ -54,6 +54,11 @@ class Resizer
         if (empty($destinationName)) {
             throw new InvalidArgument('Invalid destination file', InvalidArgument::CODE_UNPROCESSABLE);
         }
+        if ($this->storage->sourcePath($sourceName) != $this->storage->destinationPath($destinationName)
+            && file_exists($this->storage->destinationPath($destinationName))) {
+            // already exists, no sense in re-generating
+            return $this->storage->destinationPath($destinationName);
+        }
         if (isset($config['strategy'])) {
             if (is_string($config['strategy'])) {
                 $strategy = Strategy::factory($config['strategy'], $config);
