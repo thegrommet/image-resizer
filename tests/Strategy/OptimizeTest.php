@@ -54,7 +54,7 @@ class OptimizeTest extends TestCase
     public function testToString(): void
     {
         $stategy = new Optimize(null, null, 80);
-        $this->assertSame('optimize_q=80', $stategy->__toString());
+        $this->assertSame('optimize_q-80', $stategy->__toString());
         $stategy = new Optimize();
         $this->assertSame('optimize', $stategy->__toString());
     }

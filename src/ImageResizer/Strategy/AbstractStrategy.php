@@ -73,9 +73,9 @@ abstract class AbstractStrategy implements StrategyInterface
         });
         $flat = [];
         foreach ($properties as $key => $val) {
-            $flat[] = $key . '=' . $val;
+            $flat[] = $key . '-' . $val;
         }
-        return trim(static::STRATEGY . '_' . implode(',', $flat), '_');
+        return trim(static::STRATEGY . '_' . implode('_', $flat), '_');
     }
 
     public function toArray(): array

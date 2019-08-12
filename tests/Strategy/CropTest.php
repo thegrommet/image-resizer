@@ -81,6 +81,6 @@ class CropTest extends TestCase
     public function testToString(): void
     {
         $stategy = new Crop(100, 50, 80, Crop::CROP_MODE_CENTER);
-        $this->assertSame('crop_w=100,h=50,q=80,m=c', $stategy->__toString());
+        $this->assertSame('crop_w-100_h-50_q-80_m-c', $stategy->__toString());
     }
 }

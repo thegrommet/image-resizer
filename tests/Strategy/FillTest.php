@@ -80,8 +80,8 @@ class FillTest extends TestCase
     public function testToString(): void
     {
         $stategy = new Fill(100, 50, 80, '#fff');
-        $this->assertSame('fill_w=100,h=50,q=80,bg=#fff', $stategy->__toString());
+        $this->assertSame('fill_w-100_h-50_q-80_bg-#fff', $stategy->__toString());
         $stategy = new Fill(null, 50);
-        $this->assertSame('fill_h=50,bg=#ffffff', $stategy->__toString());
+        $this->assertSame('fill_h-50_bg-#ffffff', $stategy->__toString());
     }
 }

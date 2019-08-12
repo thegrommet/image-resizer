@@ -5,6 +5,7 @@ namespace Grommet\ImageResizer\Tests;
 
 use Grommet\ImageResizer\Exception\InvalidUrl;
 use Grommet\ImageResizer\ImageResizer\UrlParser;
+use Grommet\ImageResizer\Strategy\Fill;
 use Grommet\ImageResizer\Strategy\Fit;
 use Grommet\ImageResizer\Strategy\Optimize;
 use PHPUnit\Framework\TestCase;
@@ -17,22 +18,23 @@ class UrlParserTest extends TestCase
     public function testParse(): void
     {
         $parser = new UrlParser();
-        $this->assertTrue($parser->parse('/fit_w%3D400%2Ch%3D300%2Cq%3D85/i/m/image.jpg'));
+        $this->assertTrue($parser->parse('/fill_w-400_h-300_q-85_bg-#fff/i/m/image.jpg'));
         $this->assertSame('/i/m/image.jpg', $parser->imagePath);
-        $this->assertInstanceOf(Fit::class, $parser->strategy);
+        $this->assertInstanceOf(Fill::class, $parser->strategy);
         $this->assertSame(400, $parser->strategy->width);
         $this->assertSame(300, $parser->strategy->height);
         $this->assertSame(85, $parser->strategy->quality);
+        $this->assertSame('#fff', $parser->strategy->background);
 
         $this->assertTrue($parser->parse('/optimize/image.jpg'));
         $this->assertSame('/image.jpg', $parser->imagePath);
         $this->assertInstanceOf(Optimize::class, $parser->strategy);
     }
 
-    public function testParseNotEncoded(): void
+    public function testParseBadChars(): void
     {
         $parser = new UrlParser();
-        $this->assertTrue($parser->parse('/fit_w=400,h=300,q=85/i/m/image.jpg'));
+        $this->assertTrue($parser->parse('/fit_w-400_h-&300_q-.85/i/m/image.jpg'));
         $this->assertSame('/i/m/image.jpg', $parser->imagePath);
         $this->assertInstanceOf(Fit::class, $parser->strategy);
         $this->assertSame(400, $parser->strategy->width);
@@ -44,7 +46,7 @@ class UrlParserTest extends TestCase
     {
         $parser = new UrlParser();
         $parser->baseUrl = '/media/products';
-        $this->assertTrue($parser->parse('/media/products/fit_w%3D400%2Ch%3D300%2Cq%3D85/i/m/image.jpg'));
+        $this->assertTrue($parser->parse('/media/products/fit_w-400_h-300_q-85/i/m/image.jpg'));
         $this->assertSame('/i/m/image.jpg', $parser->imagePath);
         $this->assertInstanceOf(Fit::class, $parser->strategy);
         $this->assertSame(400, $parser->strategy->width);
@@ -56,7 +58,7 @@ class UrlParserTest extends TestCase
     {
         $parser = new UrlParser();
         $parser->baseUrl = 'https://www.test.com/media/products/';
-        $this->assertTrue($parser->parse('https://www.test.com/media/products/fit_w%3D400%2Ch%3D300/i/m/image.jpg'));
+        $this->assertTrue($parser->parse('https://www.test.com/media/products/fit_w-400_h-300/i/m/image.jpg'));
         $this->assertSame('/i/m/image.jpg', $parser->imagePath);
         $this->assertInstanceOf(Fit::class, $parser->strategy);
         $this->assertSame(400, $parser->strategy->width);
@@ -77,11 +79,11 @@ class UrlParserTest extends TestCase
     {
         return [
             ['/'],
-            ['/w=400%2Ch%3D300%2Cq%3D85/i/m/image.jpg'],
-            ['/w=400,h=300,q=85/i/m/image.jpg'],
+            ['/w-400_h-300_q-85/i/m/image.jpg'],
+            ['/w-400_h-300_q-85/i/m/image.jpg'],
             ['/crop/i/m/image.jpg'],
             ['/crop_/i/m/image.jpg'],
-            ['/crop_w=400,h=300,q=85/']
+            ['/crop_w-400_h-300_q-85/']
         ];
     }
 }

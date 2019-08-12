@@ -34,7 +34,7 @@ class PresetResizerTest extends TestCase
 
         $destination = implode(
             DIRECTORY_SEPARATOR,
-            [rtrim($destinationBase, DIRECTORY_SEPARATOR), 'fit_w=400,h=200', 't', 'test.jpg']
+            [rtrim($destinationBase, DIRECTORY_SEPARATOR), 'fit_w-400_h-200', 't', 'test.jpg']
         );
 
         $res = $resizer->resize('t/test.jpg', 'small');

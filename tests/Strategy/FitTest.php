@@ -60,10 +60,10 @@ class FitTest extends TestCase
     public function testToString(): void
     {
         $stategy = new Fit(100, 50, 80);
-        $this->assertSame('fit_w=100,h=50,q=80', $stategy->__toString());
+        $this->assertSame('fit_w-100_h-50_q-80', $stategy->__toString());
         $stategy = new Fit(100);
-        $this->assertSame('fit_w=100', $stategy->__toString());
+        $this->assertSame('fit_w-100', $stategy->__toString());
         $stategy = new Fit(null, 50);
-        $this->assertSame('fit_h=50', $stategy->__toString());
+        $this->assertSame('fit_h-50', $stategy->__toString());
     }
 }

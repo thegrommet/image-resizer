@@ -19,7 +19,7 @@ $newPath = $resizer->resize('in.jpg', 'out.jpg', ['strategy' => 'fit', 'width' =
 ```php
 $urlGen = new \Grommet\ImageResizer\UrlGenerator('https://cdn.site.com/media');
 $url = $urlGen->imageUrl('i/image.jpg', ['strategy' => 'fit', 'width' => 100]);
-// $url = 'https://cdn.site.com/media/fit_w%3D100/i/image.jpg'
+// $url = 'https://cdn.site.com/media/fit_w-100/i/image.jpg'
 ```
 
 ### Resize presets
@@ -39,7 +39,7 @@ $presets = [
 /* urls */
 $urlGen = new \Grommet\ImageResizer\UrlGenerator('https://cdn.site.com/media', $presets);
 $url = $urlGen->imageUrl('i/image.jpg', ['size' => 'small']);
-// $url = 'https://cdn.site.com/media/fit_w%3D293%2Ch%3D219/i/image.jpg'
+// $url = 'https://cdn.site.com/media/fit_w-293_h-219/i/image.jpg'
 
 /* files */
 $resizer = new \Grommet\ImageResizer\PresetResizer(
@@ -48,7 +48,7 @@ $resizer = new \Grommet\ImageResizer\PresetResizer(
     $presets
 );
 $newPath = $resizer->resize('image.jpg', 'large');
-// $newPath = '/path/to/save/crop_w=500,h=500,m=c/image.jpg'
+// $newPath = '/path/to/save/crop_w-500_h-500_m-c/image.jpg'
 ```
 
 ### Resizing service
@@ -60,9 +60,9 @@ $urlResizer = new \Grommet\ImageResizer\UrlResizer(
 );
 
 // incoming request for a resized image
-$url = 'https://cdn.site.com/media/fit_w=100/i/image.jpg';
+$url = 'https://cdn.site.com/media/fit_w-100/i/image.jpg';
 $newPath = $urlResizer->resize($url);
-// $newPath = '/path/to/save/fit_w=100/i/image.jpg'
+// $newPath = '/path/to/save/fit_w-100/i/image.jpg'
 
 header('content-type', 'image/jpeg');
 echo file_get_contents($newPath);

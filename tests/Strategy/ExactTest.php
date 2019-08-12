@@ -118,8 +118,8 @@ class ExactTest extends TestCase
     public function testToString(): void
     {
         $stategy = new Exact(100, 50, 80);
-        $this->assertSame('exact_w=100,h=50,q=80', $stategy->__toString());
+        $this->assertSame('exact_w-100_h-50_q-80', $stategy->__toString());
         $stategy = new Exact(100, 50);
-        $this->assertSame('exact_w=100,h=50', $stategy->__toString());
+        $this->assertSame('exact_w-100_h-50', $stategy->__toString());
     }
 }

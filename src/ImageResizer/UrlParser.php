@@ -63,11 +63,11 @@ class UrlParser
         if (empty($strategy) || preg_match('/[^a-z0-9]/i', $strategy) !== 0) {
             throw new InvalidUrl('Invalid resize strategy', InvalidUrl::CODE_NOT_FOUND);
         }
-        $params = explode(',', urldecode($params));
+        $params = (string)preg_replace('/[^a-z0-9\-_#]/i', '', urldecode($params));
         $properties = [];
-        foreach ($params as $param) {
-            if (strpos($param, '=') !== false) {
-                list($key, $val) = explode('=', $param);
+        foreach (explode('_', $params) as $param) {
+            if (strpos($param, '-') !== false) {
+                list($key, $val) = explode('-', $param);
                 $properties[$key] = $val;
             }
         }
