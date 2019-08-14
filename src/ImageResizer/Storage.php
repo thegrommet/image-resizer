@@ -43,8 +43,8 @@ class Storage
             throw new StorageException('Invalid file path', StorageException::CODE_FORBIDDEN);
         }
         $path = $this->destinationBase . DIRECTORY_SEPARATOR . ltrim($filePath, '/\\');
-        if ($makeDir && !is_dir(dirname($path)) && !@mkdir(dirname($path), 0755, true)) {
-            throw new StorageException('Cannot write to destination directory', StorageException::CODE_FORBIDDEN);
+        if ($makeDir && !is_dir(dirname($path))) {
+            @mkdir(dirname($path), 0755, true);
         }
         return $path;
     }
