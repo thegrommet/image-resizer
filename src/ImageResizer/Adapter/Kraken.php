@@ -20,7 +20,7 @@ class Kraken implements AdapterInterface
     /**
      * @var int
      */
-    public $defaultQuality = 85;
+    public $defaultQuality = 80;
 
     private $apiKey;
     private $apiSecret;

@@ -37,17 +37,17 @@ class KrakenTest extends TestCase
         $method->setAccessible(true);
         $adapter = new Kraken('key', 'secret');
 
-        $strategy = new Fit(100, 50, 80);
+        $strategy = new Fit(100, 50, 85);
         $this->assertSame([
             'resize' => [
                 'strategy' => 'fit',
                 'width' => 100,
                 'height' => 50
             ],
-            'quality' => 80
+            'quality' => 85
         ], $method->invokeArgs($adapter, [$strategy]));
 
-        $strategy = new Fill(100, 50, 85, '#fff');
+        $strategy = new Fill(100, 50, null, '#fff');
         $this->assertSame([
             'resize' => [
                 'strategy' => 'fill',
@@ -55,7 +55,7 @@ class KrakenTest extends TestCase
                 'height' => 50,
                 'background' => '#fff'
             ],
-            'quality' => 85
+            'quality' => 80
         ], $method->invokeArgs($adapter, [$strategy]));
 
         $strategy = new Crop(100, 50, null, 'c');
@@ -66,7 +66,7 @@ class KrakenTest extends TestCase
                 'height' => 50,
                 'crop_mode' => 'c'
             ],
-            'quality' => 85
+            'quality' => 80
         ], $method->invokeArgs($adapter, [$strategy]));
     }
 
