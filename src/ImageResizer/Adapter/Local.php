@@ -98,7 +98,7 @@ class Local implements AdapterInterface
             throw new ResizeException($e->getMessage(), ResizeException::CODE_INTERNAL_ERROR, $e);
         }
         if (!file_exists($destination)) {
-            throw new ResizeException('Could not resize image', InvalidStrategy::CODE_INTERNAL_ERROR);
+            throw new ResizeException('Could not resize image', ResizeException::CODE_INTERNAL_ERROR);
         }
         return true;
     }

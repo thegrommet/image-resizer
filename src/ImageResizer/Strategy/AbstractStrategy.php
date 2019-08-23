@@ -86,4 +86,9 @@ abstract class AbstractStrategy implements StrategyInterface
             'q' => $this->quality
         ];
     }
+
+    public function name(): string
+    {
+        return static::STRATEGY;
+    }
 }

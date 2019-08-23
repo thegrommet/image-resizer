@@ -10,9 +10,10 @@ use Grommet\ImageResizer\Exception\ResizeException;
  */
 class PresetResizer
 {
-    private $sourceBasePath;
-    private $destinationBasePath;
-    private $adapter;
+    /**
+     * @var Resizer
+     */
+    private $resizer;
 
     /**
      * @var array
@@ -23,14 +24,13 @@ class PresetResizer
         string $sourceBasePath,
         string $destinationBasePath,
         array $presets = [],
-        string $adapter = 'local'
+        string $adapter = 'local',
+        array $adapterConfig = []
     ) {
-        $this->sourceBasePath = $sourceBasePath;
-        $this->destinationBasePath = $destinationBasePath;
         foreach ($presets as $name => $params) {
             $this->addPreset($name, $params);
         }
-        $this->adapter = $adapter;
+        $this->resizer = new Resizer($sourceBasePath, $destinationBasePath, $adapter, $adapterConfig);
     }
 
     public function resize(string $sourceName, string $size): string
@@ -39,9 +39,8 @@ class PresetResizer
             throw new ResizeException('Size not specified', ResizeException::CODE_UNPROCESSABLE);
         }
         $strategy = Strategy::createFromConfig($this->presets[$size]);
-        $destination = rtrim($this->destinationBasePath, '\\/') . DIRECTORY_SEPARATOR . $strategy;
-        $resizer = new Resizer($this->sourceBasePath, $destination, $this->adapter);
-        return $resizer->resize($sourceName, null, ['strategy' => $strategy]);
+        $destination = $strategy . DIRECTORY_SEPARATOR . ltrim($sourceName, '\\/');
+        return $this->resizer->resize($sourceName, $destination, ['strategy' => $strategy]);
     }
 
     public function addPreset(string $name, array $resizeParams): self

@@ -29,10 +29,14 @@ class Resizer
      */
     private $storage;
 
-    public function __construct(string $sourceBase, string $destinationBase, string $adapter = 'local')
-    {
+    public function __construct(
+        string $sourceBase,
+        string $destinationBase,
+        string $adapter = 'local',
+        array $adapterConfig = []
+    ) {
         $this->storage = new Storage($sourceBase, $destinationBase);
-        $this->adapter = Adapter::factory($adapter);
+        $this->adapter = Adapter::factory($adapter, $adapterConfig);
     }
 
     /**
@@ -69,7 +73,7 @@ class Resizer
         }
         if (isset($config['adapter'])) {
             if (is_string($config['adapter'])) {
-                $adapter = Adapter::factory($config['adapter']);
+                $adapter = Adapter::factory($config['adapter'], $config[$config['adapter']] ?? []);
                 $this->setAdapter($adapter);
             } elseif ($config['adapter'] instanceof AdapterInterface) {
                 $this->setAdapter($config['adapter']);

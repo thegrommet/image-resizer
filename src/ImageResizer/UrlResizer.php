@@ -10,30 +10,31 @@ use Grommet\ImageResizer\ImageResizer\UrlParser;
  */
 class UrlResizer
 {
-    private $sourceBasePath;
-    private $destinationBasePath;
-    private $baseUrl;
-    private $adapter;
+    /**
+     * @var Resizer
+     */
+    private $resizer;
+
+    /**
+     * @var UrlParser
+     */
+    private $parser;
 
     public function __construct(
         string $sourceBasePath,
         string $destinationBasePath,
         string $baseUrl = '',
-        string $adapter = 'local'
+        string $adapter = 'local',
+        array $adapterConfig = []
     ) {
-        $this->sourceBasePath = $sourceBasePath;
-        $this->destinationBasePath = $destinationBasePath;
-        $this->baseUrl = $baseUrl;
-        $this->adapter = $adapter;
+        $this->resizer = new Resizer($sourceBasePath, $destinationBasePath, $adapter, $adapterConfig);
+        $this->parser = new UrlParser($baseUrl);
     }
 
     public function resize(string $url): string
     {
-        $parser = new UrlParser($this->baseUrl);
-        $parser->parse($url);
-
-        $destination = rtrim($this->destinationBasePath, '\\/') . DIRECTORY_SEPARATOR . $parser->strategy;
-        $resizer = new Resizer($this->sourceBasePath, $destination, $this->adapter);
-        return $resizer->resize($parser->imagePath, null, ['strategy' => $parser->strategy]);
+        $this->parser->parse($url);
+        $destination = $this->parser->strategy . DIRECTORY_SEPARATOR . ltrim($this->parser->imagePath, '\\/');
+        return $this->resizer->resize($this->parser->imagePath, $destination, ['strategy' => $this->parser->strategy]);
     }
 }

@@ -26,4 +26,9 @@ interface StrategyInterface
      * @return string
      */
     public function __toString(): string;
+
+    /**
+     * @return string
+     */
+    public function name(): string;
 }

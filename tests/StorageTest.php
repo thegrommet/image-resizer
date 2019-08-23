@@ -49,6 +49,20 @@ class StorageTest extends TestCase
         $store->destinationPath('/../image.jpg');
     }
 
+    public function testPathNormalization(): void
+    {
+        $base = $this->resourceDir();
+        $store = new Storage($base, $base);
+        $expected = $base . 't' . DIRECTORY_SEPARATOR . 'test.jpg';
+        if (DIRECTORY_SEPARATOR === '/') {
+            $this->assertSame($expected, $store->sourcePath('t\\test.jpg'));
+            $this->assertSame($expected, $store->destinationPath('t\\test.jpg'));
+        } else {
+            $this->assertSame($expected, $store->sourcePath('t/test.jpg'));
+            $this->assertSame($expected, $store->destinationPath('t/test.jpg'));
+        }
+    }
+
     /**
      * @dataProvider constructInvalidProvider
      */

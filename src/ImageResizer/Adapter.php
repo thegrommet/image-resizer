@@ -11,11 +11,11 @@ use Grommet\ImageResizer\Adapter\AdapterInterface;
  */
 class Adapter
 {
-    public static function factory(string $type): AdapterInterface
+    public static function factory(string $type, array $config = []): AdapterInterface
     {
         $class = __NAMESPACE__ . '\\Adapter\\' . ucfirst(strtolower($type));
         if (@class_exists($class)) {
-            $adapter = new $class();
+            $adapter = new $class(...$config);
             if ($adapter instanceof AdapterInterface) {
                 return $adapter;
             }

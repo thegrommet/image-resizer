@@ -34,7 +34,7 @@ class Storage
         if (strstr($filePath, '..') !== false) {
             throw new StorageException('Invalid file path', StorageException::CODE_FORBIDDEN);
         }
-        return $this->sourceBase . DIRECTORY_SEPARATOR . ltrim($filePath, '/\\');
+        return $this->sourceBase . DIRECTORY_SEPARATOR . $this->normalizePath($filePath);
     }
 
     public function destinationPath(string $filePath, bool $makeDir = false): string
@@ -42,10 +42,27 @@ class Storage
         if (strstr($filePath, '..') !== false) {
             throw new StorageException('Invalid file path', StorageException::CODE_FORBIDDEN);
         }
-        $path = $this->destinationBase . DIRECTORY_SEPARATOR . ltrim($filePath, '/\\');
+        $path = $this->destinationBase . DIRECTORY_SEPARATOR . $this->normalizePath($filePath);
         if ($makeDir && !is_dir(dirname($path))) {
             @mkdir(dirname($path), 0755, true);
         }
         return $path;
+    }
+
+    /**
+     * Normalize path separators for the current OS and remove the leading path separator
+     *
+     * @param string $filePath
+     * @return string
+     */
+    private function normalizePath(string $filePath): string
+    {
+        $filePath = ltrim($filePath, '/\\');
+        if (DIRECTORY_SEPARATOR === '\\') {
+            $replace = '/';
+        } else {
+            $replace = '\\';
+        }
+        return str_replace($replace, DIRECTORY_SEPARATOR, $filePath);
     }
 }

@@ -122,4 +122,10 @@ class ExactTest extends TestCase
         $stategy = new Exact(100, 50);
         $this->assertSame('exact_w-100_h-50', $stategy->__toString());
     }
+
+    public function testName(): void
+    {
+        $strategy = new Exact();
+        $this->assertSame('exact', $strategy->name());
+    }
 }
