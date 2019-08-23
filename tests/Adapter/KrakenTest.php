@@ -37,28 +37,37 @@ class KrakenTest extends TestCase
         $method->setAccessible(true);
         $adapter = new Kraken('key', 'secret');
 
-        $strategy = new Fit(100, 50);
-        $this->assertSame(['resize' => [
-            'strategy' => 'fit',
-            'width' => 100,
-            'height' => 50
-        ]], $method->invokeArgs($adapter, [$strategy]));
+        $strategy = new Fit(100, 50, 80);
+        $this->assertSame([
+            'resize' => [
+                'strategy' => 'fit',
+                'width' => 100,
+                'height' => 50
+            ],
+            'quality' => 80
+        ], $method->invokeArgs($adapter, [$strategy]));
 
         $strategy = new Fill(100, 50, 85, '#fff');
-        $this->assertSame(['resize' => [
-            'strategy' => 'fill',
-            'width' => 100,
-            'height' => 50,
-            'background' => '#fff'
-        ]], $method->invokeArgs($adapter, [$strategy]));
+        $this->assertSame([
+            'resize' => [
+                'strategy' => 'fill',
+                'width' => 100,
+                'height' => 50,
+                'background' => '#fff'
+            ],
+            'quality' => 85
+        ], $method->invokeArgs($adapter, [$strategy]));
 
         $strategy = new Crop(100, 50, null, 'c');
-        $this->assertSame(['resize' => [
-            'strategy' => 'crop',
-            'width' => 100,
-            'height' => 50,
-            'crop_mode' => 'c'
-        ]], $method->invokeArgs($adapter, [$strategy]));
+        $this->assertSame([
+            'resize' => [
+                'strategy' => 'crop',
+                'width' => 100,
+                'height' => 50,
+                'crop_mode' => 'c'
+            ],
+            'quality' => 85
+        ], $method->invokeArgs($adapter, [$strategy]));
     }
 
     private function resourceDir(): string

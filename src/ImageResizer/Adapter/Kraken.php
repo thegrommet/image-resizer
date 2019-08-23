@@ -17,6 +17,11 @@ use Grommet\ImageResizer\Strategy\StrategyInterface;
  */
 class Kraken implements AdapterInterface
 {
+    /**
+     * @var int
+     */
+    public $defaultQuality = 85;
+
     private $apiKey;
     private $apiSecret;
 
@@ -82,11 +87,14 @@ class Kraken implements AdapterInterface
         if ($strategy instanceof Optimize) {
             return [];
         }
-        $config = ['resize' => [
-            'strategy' => $strategy->name(),
-            'width' => $strategy->width,
-            'height' => $strategy->height
-        ]];
+        $config = [
+            'resize' => [
+                'strategy' => $strategy->name(),
+                'width' => $strategy->width,
+                'height' => $strategy->height
+            ],
+            'quality' => $strategy->quality ?: $this->defaultQuality
+        ];
         if ($strategy instanceof Fill) {
             $config['resize']['background'] = $strategy->background;
         } elseif ($strategy instanceof Crop) {

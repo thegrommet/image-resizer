@@ -68,6 +68,23 @@ header('content-type', 'image/jpeg');
 echo file_get_contents($newPath);
 ```
 
+## Resize Adapters
+By default, the resizer will use PHP's GD2 functions to resize the images. You may specify a different image resize 
+adapter to and offload that work to a 3rd party.
+
+### Kraken.io
+Use Kraken's image resizing service once you have an account and API access:
+```php
+$resizer = new \Grommet\ImageResizer\Resizer(
+    '/path/to/images',
+    '/path/to/save',
+    'kraken',
+    ['api-key', 'api-secret']
+);
+$newPath = $resizer->resize('in.jpg', 'out.jpg', ['strategy' => 'fit', 'w' => 100, 'h' => 50]);
+// $newPath = '/path/to/save/out.jpg'
+```
+
 ## Running tests
 
 ```shell
