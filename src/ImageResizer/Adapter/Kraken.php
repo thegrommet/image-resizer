@@ -84,16 +84,14 @@ class Kraken implements AdapterInterface
         if (!in_array($strategy->name(), $this->supportedStrategies())) {
             throw new InvalidStrategy('Strategy not supported by this adapter', InvalidStrategy::CODE_UNPROCESSABLE);
         }
+        $config = ['quality' => $strategy->quality ?: $this->defaultQuality];
         if ($strategy instanceof Optimize) {
-            return [];
+            return $config;
         }
-        $config = [
-            'resize' => [
-                'strategy' => $strategy->name(),
-                'width' => $strategy->width,
-                'height' => $strategy->height
-            ],
-            'quality' => $strategy->quality ?: $this->defaultQuality
+        $config['resize'] = [
+            'strategy' => $strategy->name(),
+            'width' => $strategy->width,
+            'height' => $strategy->height
         ];
         if ($strategy instanceof Fill) {
             $config['resize']['background'] = $strategy->background;

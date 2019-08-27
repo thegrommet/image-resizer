@@ -7,6 +7,7 @@ use Grommet\ImageResizer\Adapter\Kraken;
 use Grommet\ImageResizer\Strategy\Crop;
 use Grommet\ImageResizer\Strategy\Fill;
 use Grommet\ImageResizer\Strategy\Fit;
+use Grommet\ImageResizer\Strategy\Optimize;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -37,36 +38,41 @@ class KrakenTest extends TestCase
         $method->setAccessible(true);
         $adapter = new Kraken('key', 'secret');
 
+        $strategy = new Optimize();
+        $this->assertSame([
+            'quality' => 80
+        ], $method->invokeArgs($adapter, [$strategy]));
+
         $strategy = new Fit(100, 50, 85);
         $this->assertSame([
+            'quality' => 85,
             'resize' => [
                 'strategy' => 'fit',
                 'width' => 100,
                 'height' => 50
-            ],
-            'quality' => 85
+            ]
         ], $method->invokeArgs($adapter, [$strategy]));
 
         $strategy = new Fill(100, 50, null, '#fff');
         $this->assertSame([
+            'quality' => 80,
             'resize' => [
                 'strategy' => 'fill',
                 'width' => 100,
                 'height' => 50,
                 'background' => '#fff'
-            ],
-            'quality' => 80
+            ]
         ], $method->invokeArgs($adapter, [$strategy]));
 
         $strategy = new Crop(100, 50, null, 'c');
         $this->assertSame([
+            'quality' => 80,
             'resize' => [
                 'strategy' => 'crop',
                 'width' => 100,
                 'height' => 50,
                 'crop_mode' => 'c'
-            ],
-            'quality' => 80
+            ]
         ], $method->invokeArgs($adapter, [$strategy]));
     }
 
