@@ -28,7 +28,7 @@ class Fill extends AbstractStrategy
 
     public function validate(): bool
     {
-        return $this->width > 0 || $this->height > 0;
+        return $this->width > 0 && $this->height > 0 && !empty($this->background);
     }
 
     public function toArray(): array

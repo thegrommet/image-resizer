@@ -53,13 +53,13 @@ class FillTest extends TestCase
                 ]
             ],
             [
-                true,
+                false,
                 [
                     'w' => 100
                 ]
             ],
             [
-                true,
+                false,
                 [
                     'height' => 50
                 ]
@@ -81,7 +81,5 @@ class FillTest extends TestCase
     {
         $stategy = new Fill(100, 50, 80, '#fff');
         $this->assertSame('fill_w-100_h-50_q-80_bg-#fff', $stategy->__toString());
-        $stategy = new Fill(null, 50);
-        $this->assertSame('fill_h-50_bg-#ffffff', $stategy->__toString());
     }
 }

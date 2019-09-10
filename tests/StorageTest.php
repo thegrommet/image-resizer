@@ -12,6 +12,8 @@ use PHPUnit\Framework\TestCase;
  */
 class StorageTest extends TestCase
 {
+    use LoadsImages;
+
     public function testSourcePath(): void
     {
         $store = new Storage($this->resourceDir(), $this->resourceDir('new'));
@@ -37,8 +39,6 @@ class StorageTest extends TestCase
         $destDir = $this->resourceDir('new' . DIRECTORY_SEPARATOR . 'i');
         $this->assertSame($destDir . 'image.jpg', $store->destinationPath('i/image.jpg', true));
         $this->assertTrue(is_dir($destDir));
-        rmdir($destDir);
-        rmdir(dirname($destDir));
     }
 
     public function testDestinationPathInvalid(): void
@@ -83,18 +83,9 @@ class StorageTest extends TestCase
         ];
     }
 
-    private function resourceDir(string $sub = ''): string
-    {
-        $dir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR;
-        if ($sub) {
-            $dir .= $sub . DIRECTORY_SEPARATOR;
-        }
-        return $dir;
-    }
-
     public function tearDown(): void
     {
         parent::tearDown();
-        @rmdir($this->resourceDir('new'));
+        $this->removeDirectory($this->resourceDir('new'));
     }
 }

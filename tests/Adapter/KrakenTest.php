@@ -8,6 +8,7 @@ use Grommet\ImageResizer\Strategy\Crop;
 use Grommet\ImageResizer\Strategy\Fill;
 use Grommet\ImageResizer\Strategy\Fit;
 use Grommet\ImageResizer\Strategy\Optimize;
+use Grommet\ImageResizer\Tests\LoadsImages;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -15,6 +16,8 @@ use PHPUnit\Framework\TestCase;
  */
 class KrakenTest extends TestCase
 {
+    use LoadsImages;
+
     /**
      * This will actually hit the API
      */
@@ -74,10 +77,5 @@ class KrakenTest extends TestCase
                 'crop_mode' => 'c'
             ]
         ], $method->invokeArgs($adapter, [$strategy]));
-    }
-
-    private function resourceDir(): string
-    {
-        return dirname(__FILE__, 2) . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR;
     }
 }
