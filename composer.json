@@ -19,10 +19,9 @@
         "squizlabs/php_codesniffer": "^3.4"
     },
     "autoload": {
-        "psr-4": {"Grommet\\ImageResizer\\": "src/ImageResizer"}
-    },
-    "autoload-dev": {
-        "psr-4": {"Grommet\\ImageResizer\\Tests\\": "tests/"}
+        "classmap": [
+            "src/", "tests/"
+        ]
     },
     "scripts": {
         "test": "phpunit",
