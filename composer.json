@@ -20,7 +20,12 @@
     },
     "autoload": {
         "classmap": [
-            "src/", "tests/"
+            "src/"
+        ]
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/"
         ]
     },
     "scripts": {

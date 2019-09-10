@@ -131,7 +131,7 @@ class Local implements AdapterInterface
     private function fill(): void
     {
         $this->resizer->setBackground(...$this->hexToRgb($this->strategy->background));
-        $this->resizer->resizeToFill($this->strategy->width, $this->strategy->height, false);
+        $this->resizer->resizeToFill($this->strategy->width, $this->strategy->height, true);
     }
 
     private function crop(): void
