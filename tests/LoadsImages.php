@@ -12,7 +12,7 @@ trait LoadsImages
     {
         $dir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR;
         if ($sub) {
-            $dir .= $sub . DIRECTORY_SEPARATOR;
+            $dir .=  rtrim($sub, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         }
         return $dir;
     }
