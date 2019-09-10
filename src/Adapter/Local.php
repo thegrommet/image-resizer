@@ -3,15 +3,17 @@ declare(strict_types=1);
 
 namespace Grommet\ImageResizer\Adapter;
 
+use Grommet\ImageResizer\Adapter\Gumlet\ImageResize;
+use Grommet\ImageResizer\Exception\InvalidArgument;
 use Grommet\ImageResizer\Exception\InvalidStrategy;
 use Grommet\ImageResizer\Exception\ResizeException;
 use Grommet\ImageResizer\Strategy\AbstractStrategy;
 use Grommet\ImageResizer\Strategy\Crop;
 use Grommet\ImageResizer\Strategy\Exact;
+use Grommet\ImageResizer\Strategy\Fill;
 use Grommet\ImageResizer\Strategy\Fit;
 use Grommet\ImageResizer\Strategy\Optimize;
 use Grommet\ImageResizer\Strategy\StrategyInterface;
-use Gumlet\ImageResize;
 use Gumlet\ImageResizeException;
 
 /**
@@ -27,7 +29,7 @@ class Local implements AdapterInterface
     /**
      * @var int
      */
-    public $defaultPngQuality = 6;
+    public $defaultPngQuality = 7;
 
     /**
      * @var ImageResize
@@ -61,34 +63,13 @@ class Local implements AdapterInterface
         if ($strategy instanceof Optimize) {
             $this->resizer->scale(100);
         } elseif ($strategy instanceof Fit) {
-            if ($strategy->width && $strategy->height) {
-                $this->resizer->resizeToBestFit($strategy->width, $strategy->height, true);
-            } elseif ($strategy->width) {
-                $this->resizer->resizeToWidth($strategy->width, true);
-            } else {
-                $this->resizer->resizeToHeight($strategy->height, true);
-            }
+            $this->fit();
+        } elseif ($strategy instanceof Fill) {
+            $this->fill();
         } elseif ($strategy instanceof Exact) {
             $this->resizer->resize($strategy->width, $strategy->height, true);
         } elseif ($strategy instanceof Crop) {
-            switch ($strategy->cropMode) {
-                case Crop::CROP_MODE_TOP:
-                    $cropMode = ImageResize::CROPTOPCENTER;
-                    break;
-                case Crop::CROP_MODE_BOTTOM:
-                    $cropMode = ImageResize::CROPBOTTOM;
-                    break;
-                case Crop::CROP_MODE_LEFT:
-                    $cropMode = ImageResize::CROPLEFT;
-                    break;
-                case Crop::CROP_MODE_RIGHT:
-                    $cropMode = ImageResize::CROPRIGHT;
-                    break;
-                case Crop::CROP_MODE_CENTER:
-                default:
-                    $cropMode = ImageResize::CROPCENTER;
-            }
-            $this->resizer->crop($strategy->width, $strategy->height, true, $cropMode);
+            $this->crop();
         } else {
             throw new InvalidStrategy('Strategy not supported by this adapter', InvalidStrategy::CODE_UNPROCESSABLE);
         }
@@ -130,8 +111,70 @@ class Local implements AdapterInterface
         return [
             Optimize::STRATEGY,
             Exact::STRATEGY,
+            Fill::STRATEGY,
             Fit::STRATEGY,
             Crop::STRATEGY
         ];
+    }
+
+    private function fit(): void
+    {
+        if ($this->strategy->width && $this->strategy->height) {
+            $this->resizer->resizeToBestFit($this->strategy->width, $this->strategy->height, false);
+        } elseif ($this->strategy->width) {
+            $this->resizer->resizeToWidth($this->strategy->width, false);
+        } else {
+            $this->resizer->resizeToHeight($this->strategy->height, false);
+        }
+    }
+
+    private function fill(): void
+    {
+        $this->resizer->setBackground(...$this->hexToRgb($this->strategy->background));
+        $this->resizer->resizeToFill($this->strategy->width, $this->strategy->height, true);
+    }
+
+    private function crop(): void
+    {
+        switch ($this->strategy->cropMode) {
+            case Crop::CROP_MODE_TOP:
+                $cropMode = ImageResize::CROPTOPCENTER;
+                break;
+            case Crop::CROP_MODE_BOTTOM:
+                $cropMode = ImageResize::CROPBOTTOM;
+                break;
+            case Crop::CROP_MODE_LEFT:
+                $cropMode = ImageResize::CROPLEFT;
+                break;
+            case Crop::CROP_MODE_RIGHT:
+                $cropMode = ImageResize::CROPRIGHT;
+                break;
+            case Crop::CROP_MODE_CENTER:
+            default:
+                $cropMode = ImageResize::CROPCENTER;
+        }
+        $this->resizer->crop($this->strategy->width, $this->strategy->height, false, $cropMode);
+    }
+
+    /**
+     * @link https://www.php.net/manual/en/function.hexdec.php
+     */
+    private function hexToRgb(string $hex): array
+    {
+        $hex = preg_replace('/[^0-9A-Fa-f]/', '', $hex); // Gets a proper hex string
+        $rgb = [];
+        if (strlen($hex) == 6) { //If a proper hex code, convert using bitwise operation. No overhead... faster
+            $colorVal = hexdec($hex);
+            $rgb[] = 0xFF & ($colorVal >> 0x10);
+            $rgb[] = 0xFF & ($colorVal >> 0x8);
+            $rgb[] = 0xFF & $colorVal;
+        } elseif (strlen($hex) == 3) { //if shorthand notation, need some string manipulations
+            $rgb[] = hexdec(str_repeat(substr($hex, 0, 1), 2));
+            $rgb[] = hexdec(str_repeat(substr($hex, 1, 1), 2));
+            $rgb[] = hexdec(str_repeat(substr($hex, 2, 1), 2));
+        } else {
+            throw new InvalidArgument('Invalid hex code');
+        }
+        return $rgb;
     }
 }

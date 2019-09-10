@@ -11,6 +11,8 @@ use PHPUnit\Framework\TestCase;
  */
 class ResizerTest extends TestCase
 {
+    use LoadsImages;
+
     public function testResize(): void
     {
         $destination = $this->resourceDir() . 'out.jpg';
@@ -49,16 +51,11 @@ class ResizerTest extends TestCase
         $size = getimagesize($destination);
         $this->assertSame(100, $size[0]);
         $this->assertSame(50, $size[1]);
-        unlink($destination);
-        rmdir(dirname($destination));
     }
 
-    private function resourceDir(string $sub = ''): string
+    protected function tearDown(): void
     {
-        $dir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'resources' . DIRECTORY_SEPARATOR;
-        if ($sub) {
-            $dir .= $sub . DIRECTORY_SEPARATOR;
-        }
-        return $dir;
+        parent::tearDown();
+        $this->removeDirectory($this->resourceDir('new'));
     }
 }
