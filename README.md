@@ -64,17 +64,21 @@ $url = 'https://cdn.site.com/media/fit_w-100/i/image.jpg';
 $newPath = $urlResizer->resize($url);
 // $newPath = '/path/to/save/fit_w-100/i/image.jpg'
 
-header('content-type', 'image/jpeg');
-echo file_get_contents($newPath);
+header('Content-Type: image/jpeg');
+$resource = imagecreatefromjpeg($newPath);
+imagejpeg($resource);  // output to browser
+imagedestroy($resource);
 ```
 
 ## Resize Strategies
 
-`exact` - Resize to exact width and height. Aspect ratio will not be maintained.\
-`fit` - Resize to fit the specified width and height, maintaining aspect ratio.\
-`fill` - Resize to fit the specified bounds while maintaining the aspect ratio. Image will be padded with empty space with color in `background`.\
-`crop` - Crop an image to the exact size specified.\
-`optimize` - Save the image at the existing dimensions while reducing quality and file size.
+| Strategy | Description |
+| -------- | ----------- |
+| `exact` | Resize to exact width and height. Aspect ratio will not be maintained. |
+| `fit` | Resize to fit the specified width and height, maintaining aspect ratio. |
+| `fill` | Resize to fit the specified bounds while maintaining the aspect ratio. Image will be padded with empty space with color in `background`. |
+| `crop` | Crop an image to the exact size specified. Optionally specify `cropMode`. |
+| `optimize` | Save the image at the existing dimensions while reducing quality and file size. Optionally specify `quality`. |
 
 ## Resize Adapters
 By default, the resizer will use PHP's GD2 functions to resize the images. You may specify a different image resize 
