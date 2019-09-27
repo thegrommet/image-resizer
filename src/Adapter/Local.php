@@ -43,20 +43,18 @@ class Local implements AdapterInterface
 
     public function resize(string $source, string $destination, StrategyInterface $strategy): bool
     {
-        if (!$this->resizer) {
-            try {
-                $this->resizer = new ImageResize($source);
-            } catch (ImageResizeException $e) {
-                throw new ResizeException($e->getMessage(), ResizeException::CODE_NOT_FOUND, $e);
-            }
-            $this->resizer->gamma_correct = false;
-            if ($strategy->quality) {
-                $this->resizer->quality_jpg = $this->normalizeJpgQuality($strategy->quality);
-                $this->resizer->quality_png = $this->normalizePngQuality($strategy->quality);
-            } else {
-                $this->resizer->quality_jpg = $this->defaultJpgQuality;
-                $this->resizer->quality_png = $this->defaultPngQuality;
-            }
+        try {
+            $this->resizer = new ImageResize($source);
+        } catch (ImageResizeException $e) {
+            throw new ResizeException($e->getMessage(), ResizeException::CODE_NOT_FOUND, $e);
+        }
+        $this->resizer->gamma_correct = false;
+        if ($strategy->quality) {
+            $this->resizer->quality_jpg = $this->normalizeJpgQuality($strategy->quality);
+            $this->resizer->quality_png = $this->normalizePngQuality($strategy->quality);
+        } else {
+            $this->resizer->quality_jpg = $this->defaultJpgQuality;
+            $this->resizer->quality_png = $this->defaultPngQuality;
         }
         $this->strategy = $strategy;
 
