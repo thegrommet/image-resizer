@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Grommet\ImageResizer\Strategy;
@@ -8,7 +9,7 @@ namespace Grommet\ImageResizer\Strategy;
  */
 class Optimize extends AbstractStrategy
 {
-    const STRATEGY = 'optimize';
+    public const STRATEGY = 'optimize';
 
     public function validate(): bool
     {

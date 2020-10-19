@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Grommet\ImageResizer\Strategy;
@@ -8,13 +9,13 @@ namespace Grommet\ImageResizer\Strategy;
  */
 class Crop extends AbstractStrategy
 {
-    const STRATEGY = 'crop';
+    public const STRATEGY = 'crop';
 
-    const CROP_MODE_CENTER = 'c';
-    const CROP_MODE_TOP = 't';
-    const CROP_MODE_BOTTOM = 'b';
-    const CROP_MODE_LEFT = 'l';
-    const CROP_MODE_RIGHT = 'r';
+    public const CROP_MODE_CENTER = 'c';
+    public const CROP_MODE_TOP = 't';
+    public const CROP_MODE_BOTTOM = 'b';
+    public const CROP_MODE_LEFT = 'l';
+    public const CROP_MODE_RIGHT = 'r';
 
     /**
      * @var string

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Grommet\ImageResizer\Strategy;
@@ -10,7 +11,7 @@ use Grommet\ImageResizer\Exception\InvalidStrategy;
  */
 abstract class AbstractStrategy implements StrategyInterface
 {
-    const STRATEGY = '';
+    public const STRATEGY = '';
 
     protected $configAliases = [
         'w' => 'width',

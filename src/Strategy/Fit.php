@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Grommet\ImageResizer\Strategy;
@@ -8,7 +9,7 @@ namespace Grommet\ImageResizer\Strategy;
  */
 class Fit extends AbstractStrategy
 {
-    const STRATEGY = 'fit';
+    public const STRATEGY = 'fit';
 
     public function validate(): bool
     {

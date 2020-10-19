@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Grommet\ImageResizer\Strategy;
@@ -8,7 +9,7 @@ namespace Grommet\ImageResizer\Strategy;
  */
 class Fill extends AbstractStrategy
 {
-    const STRATEGY = 'fill';
+    public const STRATEGY = 'fill';
 
     /**
      * @var string
