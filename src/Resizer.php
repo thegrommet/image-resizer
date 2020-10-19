@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Grommet\ImageResizer;
@@ -58,8 +59,10 @@ class Resizer
         if (empty($destinationName)) {
             throw new InvalidArgument('Invalid destination file', InvalidArgument::CODE_UNPROCESSABLE);
         }
-        if ($this->storage->sourcePath($sourceName) != $this->storage->destinationPath($destinationName)
-            && file_exists($this->storage->destinationPath($destinationName))) {
+        if (
+            $this->storage->sourcePath($sourceName) != $this->storage->destinationPath($destinationName)
+            && file_exists($this->storage->destinationPath($destinationName))
+        ) {
             // already exists, no sense in re-generating
             return $this->storage->destinationPath($destinationName);
         }
@@ -90,11 +93,13 @@ class Resizer
             throw new InvalidArgument('Required parameters not set on strategy', InvalidArgument::CODE_UNPROCESSABLE);
         }
 
-        if ($this->adapter->resize(
-            $this->storage->sourcePath($sourceName),
-            $this->storage->destinationPath($destinationName, true),
-            $this->strategy
-        )) {
+        if (
+            $this->adapter->resize(
+                $this->storage->sourcePath($sourceName),
+                $this->storage->destinationPath($destinationName, true),
+                $this->strategy
+            )
+        ) {
             return $this->storage->destinationPath($destinationName);
         }
         throw new ResizeException('Unable to resize the image', InvalidArgument::CODE_INTERNAL_ERROR);

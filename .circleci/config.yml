@@ -2,11 +2,15 @@
 #
 # Check https://circleci.com/docs/2.0/language-php/ for more details
 #
-version: 2
+version: 2.1
+
 jobs:
   build:
+    parameters:
+      version:
+        type: string
     docker:
-      - image: dailygrommet/php-cli-base:7.2
+      - image: dailygrommet/php-cli-base:<< parameters.version >>
 
     working_directory: ~/repo
 
@@ -34,3 +38,11 @@ jobs:
       - run:
           name: PHPUnit
           command: composer test
+
+workflows:
+  workflow:
+    jobs:
+      - build:
+          matrix:
+            parameters:
+              version: ["7.3", "7.4"]

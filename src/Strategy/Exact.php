@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Grommet\ImageResizer\Strategy;
@@ -8,7 +9,7 @@ namespace Grommet\ImageResizer\Strategy;
  */
 class Exact extends AbstractStrategy
 {
-    const STRATEGY = 'exact';
+    public const STRATEGY = 'exact';
 
     public function validate(): bool
     {

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Grommet\ImageResizer;
@@ -38,8 +39,10 @@ class Strategy
                 throw new InvalidStrategy('Invalid resize strategy', InvalidStrategy::CODE_UNPROCESSABLE);
             }
         } else {  // guess strategy
-            if (isset($resizeParams['width']) || isset($resizeParams['height'])
-                || isset($resizeParams['w']) || isset($resizeParams['h'])) {
+            if (
+                isset($resizeParams['width']) || isset($resizeParams['height'])
+                || isset($resizeParams['w']) || isset($resizeParams['h'])
+            ) {
                 $strategy = new Fit();
             } else {
                 $strategy = new Optimize();
