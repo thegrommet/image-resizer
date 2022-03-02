@@ -9,5 +9,4 @@ namespace Grommet\ImageResizer\Exception;
  */
 class InvalidUrl extends AbstractException
 {
-
 }

@@ -10,7 +10,7 @@ jobs:
       version:
         type: string
     docker:
-      - image: dailygrommet/php-cli-base:<< parameters.version >>
+      - image: dailygrommet/ci-php:<< parameters.version >>
         auth:
           username: $DOCKERHUB_USER
           password: $DOCKERHUB_PASSWORD
@@ -49,4 +49,4 @@ workflows:
           context: ["build-bot"]
           matrix:
             parameters:
-              version: ["7.3", "7.4"]
+              version: ["7.4", "8.0"]

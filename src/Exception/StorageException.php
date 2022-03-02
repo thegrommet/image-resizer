@@ -9,5 +9,4 @@ namespace Grommet\ImageResizer\Exception;
  */
 class StorageException extends AbstractException
 {
-
 }

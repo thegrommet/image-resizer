@@ -9,5 +9,4 @@ namespace Grommet\ImageResizer\Exception;
  */
 class ResizeException extends AbstractException
 {
-
 }
